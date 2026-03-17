@@ -1,30 +1,80 @@
 # TF-IDF Extractive Text Summarizer
 
-This project implements an **extractive text summarizer** using **TF-IDF sentence scoring** in pure Python.
+This project implements a modular extractive summarizer with:
 
-## How it works
+1. Preprocessing with stopword removal and stemming/lemmatization.
+2. Sentence length normalization during TF-IDF scoring.
+3. Cosine similarity filtering to reduce redundant output sentences.
 
-1. Split input text into sentences.
-2. Tokenize each sentence and remove common stopwords.
-3. Compute IDF for each token across all sentences.
-4. Compute each sentence score as the sum of token TF-IDF values.
-5. Select top-N scoring sentences and keep their original order.
+## Project Structure
+
+```
+.
+├── preprocess.py
+├── tfidf_ranker.py
+├── summarizer.py
+├── evaluation.py
+├── main.py
+├── datasets/
+│   └── sample.txt
+└── README.md
+```
+
+## Features
+
+### 1) Preprocessing
+
+- Stopword removal using NLTK stopwords.
+- Lemmatization with NLTK WordNet lemmatizer by default.
+- Optional stemming with Porter stemmer.
+- Optional spaCy pipeline support (`--use-spacy`) when installed.
+
+### 2) Sentence Length Normalization
+
+- Sentence score uses TF-IDF with normalization by $\sqrt{L}$, where $L$ is sentence token length.
+- This prevents long sentences from dominating purely due to more terms.
+
+### 3) Cosine Similarity Filtering
+
+- After ranking, candidate sentences are filtered by cosine similarity.
+- Highly similar sentences (above threshold) are skipped to reduce redundancy.
+
+## Dependencies
+
+Install required libraries:
+
+```bash
+pip install nltk spacy
+```
+
+Optional spaCy English model:
+
+```bash
+python -m spacy download en_core_web_sm
+```
 
 ## Run
 
-```bash
-python tfidf_summarizer.py --text "Natural language processing helps computers understand text. Summarization reduces long text into concise information. Extractive methods choose important sentences directly. TF-IDF highlights informative terms. This makes summaries simple and effective." --sentences 2 --show-scores
-```
-
-Or summarize from a file:
+Using sample file:
 
 ```bash
-python tfidf_summarizer.py --file sample.txt --sentences 3
+python main.py --file datasets/sample.txt --sentences 3 --show-details --show-eval
 ```
 
-## Arguments
+Using direct text:
 
-- `--text`: input text string
-- `--file`: path to input text file
-- `--sentences`: number of summary sentences (default: 3)
-- `--show-scores`: print selected sentence scores
+```bash
+python main.py --text "Natural language processing helps computers understand text. Summarization reduces long text into concise information. Extractive methods choose important sentences directly. TF-IDF highlights informative terms. This makes summaries simple and effective." --sentences 2
+```
+
+## CLI Options
+
+- `--text`: input text to summarize
+- `--file`: path to input file (default: `datasets/sample.txt`)
+- `--sentences`: number of output sentences
+- `--use-spacy`: use spaCy tokenizer/lemmatizer when available
+- `--stemming`: use stemming instead of lemmatization
+- `--disable-length-normalization`: turn off sentence length normalization
+- `--similarity-threshold`: cosine threshold for redundancy filtering
+- `--show-details`: show selected sentence scores
+- `--show-eval`: print basic summary metrics
