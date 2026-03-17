@@ -1,0 +1,19 @@
+Natural language processing (NLP) is a branch of artificial intelligence that focuses on the interaction between computers and human language. It enables machines to read, understand, and generate text in ways that are both meaningful and useful. The field has grown rapidly over the past decade, driven by advances in deep learning and the availability of large text datasets.
+
+Text summarization is one of the most practical applications of NLP. It automatically condenses long documents into shorter versions while preserving the most important information. This saves readers significant time when dealing with large volumes of text such as news articles, research papers, or legal documents.
+
+There are two main approaches to text summarization: extractive and abstractive. Extractive summarization selects existing sentences or phrases directly from the source document. Abstractive summarization generates new sentences that paraphrase the original content, much like how a human would write a summary.
+
+TF-IDF stands for Term Frequency-Inverse Document Frequency. It is a numerical statistic used to reflect how important a word is to a document in a collection. Words that appear frequently in a single sentence but rarely across other sentences receive a high TF-IDF score, indicating they are informative and distinctive.
+
+In extractive summarization, TF-IDF scores are assigned to sentences by aggregating the scores of their constituent words. Sentences with higher aggregate scores are considered more informative and are therefore selected for the summary. Length normalization ensures that very long sentences are not unfairly favored simply because they contain more terms.
+
+Redundancy is a common problem in extractive summarization. Two highly similar sentences may both receive high TF-IDF scores, leading to repetitive output. Cosine similarity filtering addresses this by measuring the similarity between candidate sentences and skipping those that are too similar to sentences already selected.
+
+Preprocessing is a critical step before computing TF-IDF. Common preprocessing steps include tokenization, stopword removal, stemming, and lemmatization. Removing stopwords eliminates common words like "the" and "is" that carry little meaning, while stemming and lemmatization reduce words to their base form to improve term matching.
+
+NLTK, the Natural Language Toolkit, is a widely used Python library for NLP tasks. It provides tools for tokenization, part-of-speech tagging, parsing, and accessing corpora such as the WordNet lexical database. SpaCy is a more modern alternative, offering fast and accurate NLP pipelines suitable for production use.
+
+Evaluation of summarization systems typically involves comparing generated summaries against human-written reference summaries using metrics such as ROUGE. However, intrinsic metrics like compression ratio and sentence coverage can also give a quick indication of summary quality without needing reference data.
+
+The combination of TF-IDF scoring, sentence length normalization, and cosine similarity filtering produces extractive summaries that are informative, concise, and non-redundant. This approach is simple to implement, computationally efficient, and requires no model training, making it a strong baseline for text summarization tasks.
