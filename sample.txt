@@ -1,0 +1,7 @@
+Natural language processing is a field of artificial intelligence.
+It focuses on enabling computers to understand and generate human language.
+Text summarization is one of its key applications.
+Extractive summarization selects existing sentences that carry important information.
+TF-IDF is a common weighting scheme that highlights informative terms.
+By scoring each sentence using TF-IDF, we can select a concise and useful summary.
+This approach is simple, interpretable, and effective for many practical tasks.
