@@ -12,7 +12,7 @@ import math
 from collections import Counter
 
 from preprocess import preprocess_document
-from tfidf_ranker import compute_tfidf_scores, rank_sentences
+from tfidf_ranker import apply_position_weights, compute_tfidf_scores, rank_sentences
 
 
 # ---------------------------------------------------------------------------
@@ -58,6 +58,9 @@ def summarize(
     use_spacy=None,
     length_norm: bool = True,
     similarity_threshold: float = 0.7,
+    position_aware: bool = True,
+    edge_boost: float = 1.25,
+    middle_penalty: float = 0.85,
 ) -> dict:
     """
     Produce an extractive summary of *text*.
@@ -71,6 +74,10 @@ def summarize(
     length_norm          : apply sqrt(L) length normalisation to TF-IDF scores
     similarity_threshold : cosine similarity above which a sentence is
                            considered redundant and skipped (0–1)
+    position_aware       : if True, boost start/end sentence scores and
+                           downweight middle sentences
+    edge_boost           : multiplicative weight near document edges
+    middle_penalty       : multiplicative weight near document middle
 
     Returns
     -------
@@ -95,6 +102,12 @@ def summarize(
         }
 
     scores = compute_tfidf_scores(token_lists, length_norm=length_norm)
+    if position_aware:
+        scores = apply_position_weights(
+            scores,
+            edge_boost=edge_boost,
+            middle_penalty=middle_penalty,
+        )
     ranked = rank_sentences(scores)
 
     idf = _build_idf(token_lists)
