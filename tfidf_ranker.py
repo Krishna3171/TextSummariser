@@ -9,6 +9,11 @@ Score formula
 
 where L is the number of tokens in sentence s (length normalisation).
 Length normalisation can be disabled via ``length_norm=False``.
+
+Position-aware weighting
+------------------------
+Use ``apply_position_weights`` to boost opening/closing sentences and
+downweight middle sentences with a smooth U-shaped weighting curve.
 """
 
 import math
@@ -85,3 +90,29 @@ def rank_sentences(scores: list[float]) -> list[tuple[int, float]]:
     indexed = list(enumerate(scores))
     indexed.sort(key=lambda x: x[1], reverse=True)
     return indexed
+
+
+def apply_position_weights(
+    scores: list[float],
+    edge_boost: float = 1.25,
+    middle_penalty: float = 0.85,
+) -> list[float]:
+    """
+    Apply sentence-position weighting to a score list.
+
+    Sentences near the beginning and end receive higher weights, while
+    middle sentences receive lower weights. The weighting is symmetric
+    and smooth across the document.
+    """
+    n = len(scores)
+    if n <= 1:
+        return scores[:]
+
+    weighted_scores: list[float] = []
+    for i, score in enumerate(scores):
+        x = i / (n - 1)
+        edge_strength = (2 * x - 1) ** 2
+        weight = middle_penalty + (edge_boost - middle_penalty) * edge_strength
+        weighted_scores.append(score * weight)
+
+    return weighted_scores
