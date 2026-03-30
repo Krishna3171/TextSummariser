@@ -47,24 +47,62 @@ def _inverse_document_frequency(token_lists: list[list[str]], n_docs: int) -> di
     return idf
 
 
+def _ngram_tokens(tokens: list[str], n: int) -> list[str]:
+    """Return a list of n-gram strings joined with underscores."""
+    if n < 1:
+        raise ValueError("n must be >= 1")
+    return ["_".join(tokens[i : i + n]) for i in range(len(tokens) - n + 1)]
+
+
+def build_idf(token_lists: list[list[str]], max_n: int = 3) -> dict[int, dict[str, float]]:
+    """Build IDF dictionaries for 1-grams through max_n-grams."""
+    return {
+        n: _inverse_document_frequency(
+            [_ngram_tokens(tokens, n) for tokens in token_lists],
+            len(token_lists),
+        )
+        for n in range(1, max_n + 1)
+    }
+
+
+def build_tfidf_vector(
+    tokens: list[str],
+    idf_by_n: dict[int, dict[str, float]],
+    weights: tuple[float, float, float] = (0.6, 0.3, 0.1),
+) -> dict[str, float]:
+    """Build a weighted TF-IDF vector using unigram/bigram/trigram interpolation."""
+    vec: dict[str, float] = {}
+    for n, weight in zip((1, 2, 3), weights):
+        if weight <= 0:
+            continue
+        ngrams = _ngram_tokens(tokens, n)
+        tf = _term_frequency(ngrams)
+        for term, value in tf.items():
+            vec[term] = vec.get(term, 0.0) + value * idf_by_n[n].get(term, 0.0) * weight
+    return vec
+
+
 def compute_tfidf_scores(
     token_lists: list[list[str]],
     length_norm: bool = True,
+    weights: tuple[float, float, float] = (0.6, 0.3, 0.1),
 ) -> list[float]:
     """
-    Compute a TF-IDF importance score for each sentence.
+    Compute a TF-IDF importance score for each sentence using linear
+    interpolation over unigrams, bigrams, and trigrams.
 
     Parameters
     ----------
     token_lists : preprocessed token lists (one per sentence)
     length_norm : if True, divide score by sqrt(sentence_length)
+    weights     : interpolation weights for (uni, bi, tri)
 
     Returns
     -------
     List of float scores, one per sentence.
     """
     n = len(token_lists)
-    idf = _inverse_document_frequency(token_lists, n)
+    idf_by_n = build_idf(token_lists)
 
     scores: list[float] = []
     for tokens in token_lists:
@@ -72,8 +110,13 @@ def compute_tfidf_scores(
             scores.append(0.0)
             continue
 
-        tf = _term_frequency(tokens)
-        raw_score = sum(tf[t] * idf.get(t, 0.0) for t in tf)
+        raw_score = 0.0
+        for ngram_size, weight in zip((1, 2, 3), weights):
+            if weight <= 0:
+                continue
+            ngrams = _ngram_tokens(tokens, ngram_size)
+            tf = _term_frequency(ngrams)
+            raw_score += weight * sum(tf[t] * idf_by_n[ngram_size].get(t, 0.0) for t in tf)
 
         if length_norm:
             raw_score /= math.sqrt(len(tokens))

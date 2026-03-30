@@ -9,23 +9,26 @@ High-level summarization pipeline:
 """
 
 import math
-from collections import Counter
 
 from preprocess import preprocess_document
-from tfidf_ranker import apply_position_weights, compute_tfidf_scores, rank_sentences
+from tfidf_ranker import (
+    apply_position_weights,
+    build_idf,
+    build_tfidf_vector,
+    compute_tfidf_scores,
+    rank_sentences,
+)
 
 
 # ---------------------------------------------------------------------------
 # Cosine similarity helpers
 # ---------------------------------------------------------------------------
 
-def _tfidf_vector(tokens: list[str], idf: dict[str, float]) -> dict[str, float]:
+def _tfidf_vector(tokens: list[str], idf: dict[int, dict[str, float]]) -> dict[str, float]:
     """TF-IDF vector for a single sentence token list."""
     if not tokens:
         return {}
-    total = len(tokens)
-    counts = Counter(tokens)
-    return {t: (c / total) * idf.get(t, 1.0) for t, c in counts.items()}
+    return build_tfidf_vector(tokens, idf)
 
 
 def _cosine_similarity(vec_a: dict[str, float], vec_b: dict[str, float]) -> float:
@@ -36,15 +39,6 @@ def _cosine_similarity(vec_a: dict[str, float], vec_b: dict[str, float]) -> floa
     if mag_a == 0 or mag_b == 0:
         return 0.0
     return dot / (mag_a * mag_b)
-
-
-def _build_idf(token_lists: list[list[str]]) -> dict[str, float]:
-    n = len(token_lists)
-    df: dict[str, int] = {}
-    for tokens in token_lists:
-        for t in set(tokens):
-            df[t] = df.get(t, 0) + 1
-    return {t: math.log((n + 1) / (freq + 1)) + 1 for t, freq in df.items()}
 
 
 # ---------------------------------------------------------------------------
@@ -110,7 +104,7 @@ def summarize(
         )
     ranked = rank_sentences(scores)
 
-    idf = _build_idf(token_lists)
+    idf = build_idf(token_lists)
     vectors = [_tfidf_vector(tl, idf) for tl in token_lists]
 
     # Greedily select sentences that are not too similar to already-chosen ones
