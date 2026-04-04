@@ -42,6 +42,41 @@ def _cosine_similarity(vec_a: dict[str, float], vec_b: dict[str, float]) -> floa
 
 
 # ---------------------------------------------------------------------------
+# Key - Word Boosting helpers
+# ---------------------------------------------------------------------------
+
+def _apply_ner_boost(
+    scores: dict[int, float],
+    sentences: list[str],
+    nlp,
+    entity_weights: dict[str, float] | None = None,
+) -> dict[int, float]:
+    """
+    Boost sentence scores based on presence of named entities.
+    """
+
+    if entity_weights is None:
+        entity_weights = {
+            "PERSON": 1.5,
+            "ORG": 1.4,
+            "GPE": 1.3,   # locations
+            "LOC": 1.2,
+            "PRODUCT": 1.2,
+        }
+
+    for i, sent in enumerate(sentences):
+        doc = nlp(sent)
+        boost = 1.0
+
+        for ent in doc.ents:
+            boost += entity_weights.get(ent.label_, 1.0) - 1.0
+
+        scores[i] *= boost
+
+    return scores
+
+
+# ---------------------------------------------------------------------------
 # Main summarizer
 # ---------------------------------------------------------------------------
 
@@ -55,6 +90,7 @@ def summarize(
     position_aware: bool = True,
     edge_boost: float = 1.25,
     middle_penalty: float = 0.85,
+    use_ner_boost: bool = False,
 ) -> dict:
     """
     Produce an extractive summary of *text*.
@@ -96,6 +132,12 @@ def summarize(
         }
 
     scores = compute_tfidf_scores(token_lists, length_norm=length_norm)
+    
+    
+    if use_ner_boost and use_spacy is not None:
+        scores = _apply_ner_boost(scores, sentences, use_spacy)
+    
+    
     if position_aware:
         scores = apply_position_weights(
             scores,

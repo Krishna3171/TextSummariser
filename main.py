@@ -95,6 +95,7 @@ def main():
         use_spacy=spacy_model,
         length_norm=not args.disable_length_normalization,
         similarity_threshold=args.similarity_threshold,
+        use_ner_boost=False
     )
 
     print("\n=== Summary ===")
