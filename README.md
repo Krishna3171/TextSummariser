@@ -39,6 +39,12 @@ This project implements a modular extractive summarizer with:
 - After ranking, candidate sentences are filtered by cosine similarity.
 - Highly similar sentences (above threshold) are skipped to reduce redundancy.
 
+### 4) Keyword Boosting (with NER)
+- Supports keyword boosting using Named Entity Recognition (NER).
+- To enable this feature:
+- Set use_ner_boost = True in the configuration/code.
+- Run the CLI with --use-spacy to activate spaCy-based NER.
+
 ## Dependencies
 
 Install required libraries:
