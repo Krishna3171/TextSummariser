@@ -42,8 +42,8 @@ This project implements a modular extractive summarizer with:
 ### 4) Keyword Boosting (with NER)
 - Supports keyword boosting using Named Entity Recognition (NER).
 - To enable this feature:
-- Set `use_ner_boost = True` in the configuration/code.
-- Run the CLI with (`--use-spacy`) to activate spaCy-based NER.
+   - Set `use_ner_boost = True` in the configuration/code.
+   - Run the CLI with (`--use-spacy`) to activate spaCy-based NER.
 
 ## Dependencies
 
