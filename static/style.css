@@ -1,0 +1,198 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 28px;
+  background: radial-gradient(circle at top left, #1f2937, #111827);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 24px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 2.5vw, 3rem);
+}
+
+.hero p {
+  margin: 0;
+  color: #cbd5e1;
+  max-width: 720px;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+}
+
+.card {
+  padding: 24px;
+  background: #111827;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+}
+
+.form-card label,
+.form-card .form-row label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  padding: 16px;
+  resize: vertical;
+  background: #0f172a;
+  color: #e2e8f0;
+  min-height: 230px;
+}
+
+input[type="number"], input[type="range"] {
+  width: 100%;
+}
+
+.form-row {
+  margin-top: 18px;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+
+.checkbox-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.primary-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #4f46e5, #2563eb);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  filter: brightness(1.05);
+}
+
+.result-card h2,
+.form-card h2 {
+  margin-top: 0;
+}
+
+.summary-box {
+  margin: 18px 0;
+  padding: 22px;
+  border-radius: 20px;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  line-height: 1.75;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.metric-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.metric-card strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #f8fafc;
+}
+
+.metric-card span {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.chart-card {
+  padding: 18px;
+  border-radius: 20px;
+  background: #0f172a;
+}
+
+.selected-sentences {
+  margin-top: 22px;
+}
+
+.selected-sentences ol {
+  margin: 0;
+  padding-left: 24px;
+}
+
+.selected-sentences li {
+  margin-bottom: 12px;
+}
+
+.error-box {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #831843;
+  color: white;
+}
+
+.placeholder {
+  color: #94a3b8;
+}
+
+@media (max-width: 1040px) {
+  .grid-layout, .chart-row {
+    grid-template-columns: 1fr;
+  }
+}

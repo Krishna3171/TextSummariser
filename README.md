@@ -59,6 +59,8 @@ Optional spaCy English model:
 python -m spacy download en_core_web_sm
 ```
 
+If spaCy is installed but the app still reports the model is unavailable, install the English model explicitly and restart the app.
+
 ## Run
 
 Using sample file:
@@ -72,6 +74,24 @@ Using direct text:
 ```bash
 python main.py --text "Natural language processing helps computers understand text. Summarization reduces long text into concise information. Extractive methods choose important sentences directly. TF-IDF highlights informative terms. This makes summaries simple and effective." --sentences 2
 ```
+
+## Web Frontend
+
+A Flask web application is included for an interactive UI with graphs.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then run:
+
+```bash
+python app.py
+```
+
+Open `http://127.0.0.1:5000/` in your browser.
 
 ## CLI Options
 
