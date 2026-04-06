@@ -90,7 +90,7 @@ def summarize(
     position_aware: bool = True,
     edge_boost: float = 1.25,
     middle_penalty: float = 0.85,
-    use_ner_boost: bool = False,
+    use_ner_boost: bool = True,
 ) -> dict:
     """
     Produce an extractive summary of *text*.
