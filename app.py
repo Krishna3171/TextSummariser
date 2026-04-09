@@ -49,7 +49,7 @@ def build_summary_result(form_data: dict) -> dict:
         use_spacy=spacy_model,
         length_norm=use_length_norm,
         similarity_threshold=similarity_threshold,
-        use_ner_boost=False,
+        use_ner_boost=True,
     )
 
     metrics = evaluate(result)
