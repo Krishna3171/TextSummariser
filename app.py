@@ -31,7 +31,7 @@ def build_summary_result(form_data: dict) -> dict:
     similarity_threshold = float(form_data.get("similarity_threshold", 0.7))
     use_stemming = bool(form_data.get("use_stemming"))
     use_spacy = bool(form_data.get("use_spacy"))
-    use_length_norm = bool(form_data.get("use_length_norm", True))
+    use_length_norm = bool(form_data.get("use_length_norm",False))
 
     spacy_model = None
     if use_spacy:

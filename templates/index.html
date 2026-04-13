@@ -40,7 +40,7 @@
           </div>
 
           <div class="checkbox-row">
-            <label><input type="checkbox" name="use_length_norm" {% if request.form.get('use_length_norm', 'on') %}checked{% endif %}/> Enable length normalization</label>
+            <label><input type="checkbox" name="use_length_norm" {% if request.form.get('use_length_norm') %}checked{% endif %}/> Enable length normalization</label>
           </div>
 
           <button type="submit" class="primary-button">Generate Summary</button>

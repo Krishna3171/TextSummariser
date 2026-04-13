@@ -137,8 +137,8 @@ def rank_sentences(scores: list[float]) -> list[tuple[int, float]]:
 
 def apply_position_weights(
     scores: list[float],
-    edge_boost: float = 1.25,
-    middle_penalty: float = 0.85,
+    edge_boost: float = 1.05,
+    middle_penalty: float = 0.95,
 ) -> list[float]:
     """
     Apply sentence-position weighting to a score list.
